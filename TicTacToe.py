@@ -1,4 +1,4 @@
-# version 1.0
+# version 1.1
 # Tic Tac Toe
 from tkinter import *
 
@@ -76,7 +76,8 @@ def moving(event):
 # Main
 root = Tk()
 root.title('Tic Tac Toe')
-root.geometry('+550+200')
+root.geometry('+550+150')
+root.resizable(False, False)
 canvas = Canvas(root, width=600, height=600, bg='#003300')
 new_game()
 canvas.grid()
