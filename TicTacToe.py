@@ -24,24 +24,28 @@ def new_game(event=1):
     canvas.create_line(0, 400, 600, 400, fill='white', width=2)
 
 
-def end_game(event):
+def end_game(event=1):  # тут этот event вообще не неужен
     sys.exit(0)
 
 
 def moving(event):
-    global move, field, in_game, win_game
+    global move, field, in_game, win_game, canvas
     if not in_game:
         new_game()
         return 0
     x, y = event.x // square_size * square_size, event.y // square_size * square_size
-    if field[y // square_size][x // square_size] == 3:
+    if field[y // square_size][x // square_size] == 3:  # если на эту клетку ещё не ходили
         field[y // square_size][x // square_size] = move
         if move == 1:
-            canvas.create_line(x + 5, y + 5, x + 195, y + 195, fill='red', width=2)
-            canvas.create_line(x + 195, y + 5, x + 5, y + 195, fill='red', width=2)
+            imgx = PhotoImage(file='TicTacToeMoveX.png')
+            canvas.create_image(x, y, image=imgx, anchor=NW)
+            # canvas.create_line(x + 5, y + 5, x + 195, y + 195, fill='red', width=2)
+            # canvas.create_line(x + 195, y + 5, x + 5, y + 195, fill='red', width=2)
             move = 0
         else:
-            canvas.create_oval(x + 5, y + 5, x + 195, y + 195, outline='red', width=2)
+            img0 = PhotoImage(file='TicTacToeMove0.png')
+            canvas.create_image(x, y, image=img0, anchor=NW)
+            # canvas.create_oval(x + 5, y + 5, x + 195, y + 195, outline='red', width=2)
             move = 1
         if field[0][0] != 3 and (field[0][0] == field[0][1] == field[0][2] or
                                  field[0][0] == field[1][0] == field[2][0] or
@@ -58,18 +62,19 @@ def moving(event):
             win_game = 2
         if win_game < 3:
             in_game = False
-            if win_game == 0:
-                result = 'Победили нолики!'
-            elif win_game == 1:
-                result = 'Победили крестики!'
-            else:
-                result = 'Ничья!'
             winner = Toplevel()
             winner.title('Игра закончена!')
-            winner.geometry('+700+420')
+            winner.geometry('+680+400')
             winner.grab_set()
-            lbl = Label(winner, height=5, width=20, font=('Times New Roman', 20), text=result)
-            lbl.pack()
+            result_canvas = Canvas(winner, width=420, height=120)
+            if win_game == 0:
+                img = PhotoImage(file='TicTacToe0.png')
+            elif win_game == 1:
+                img = PhotoImage(file='TicTacToeX.png')
+            else:
+                img = PhotoImage(file='TicTacToeNotWin.png')
+            result_canvas.create_image(10, 10, anchor=NW, image=img)
+            result_canvas.pack()
             winner.mainloop()
 
 
@@ -80,7 +85,7 @@ root.geometry('+550+150')
 root.resizable(False, False)
 canvas = Canvas(root, width=600, height=600, bg='#003300')
 new_game()
-canvas.grid()
+canvas.pack()
 canvas.focus_set()
 canvas.bind('<ButtonPress>', moving)
 canvas.bind('q', end_game)
