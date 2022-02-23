@@ -1,4 +1,4 @@
-// m * log n
+// m * log(n)
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -22,21 +22,21 @@ int main() {
     }
     vector<int> d(n, INF);
     vector<bool> used(n, false);
-    set<pair<int, int>> s;
+    set<pair<int, int>> b;
     d[0] = 0;
-    for (int i = 0; i < n; ++i) s.insert({d[i], i});
-    while (!s.empty() && s.begin()->first != INF) {
-        int minV = s.begin()->second;
-        s.erase(s.begin());
+    for (int i = 0; i < n; ++i) b.insert({d[i], i});
+    while (!b.empty() && b.begin()->first != INF) {
+        int minV = b.begin()->second;
+        b.erase(b.begin());
         used[minV] = true;
         for (auto [v, w]: g[minV]) {
             if (d[v] > d[minV] + w) {
-                s.erase({d[v], v});
+                b.erase({d[v], v});
                 d[v] = d[minV] + w;
-                s.insert({d[v], v});
+                b.insert({d[v], v});
             }
         }
     }
-    for (int e: d) cout << e << ' ';
+    for (int x: d) cout << x << ' '; cout << '\n';
     return 0;
 }
