@@ -1,0 +1,44 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <set>
+using namespace std;
+
+const int INF = 1e9;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    int n, m; cin >> n >> m;
+    vector<vector<pair<int, int>>> g(n);
+    for (int i = 0; i < m; ++i) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        g[u - 1].emplace_back(v - 1, w);
+        g[v - 1].emplace_back(u - 1, w);
+    }
+    vector<pair<long long, int>> d(n, make_pair(INF, -1));
+    vector<bool> used(n, false);
+    d[0].first = 0;
+    while (true) {
+        long long minDist = INF, minV = 0;
+        for (int i = 0; i < n; ++i) {
+            if (!used[i] && d[i].first < minDist) {
+                minDist = d[i].first;
+                minV = i;
+            }
+        } if (minDist == INF) break;
+        used[minV] = true;
+        for (auto [v, w]: g[minV]) if (d[v].first > d[minV].first + w) d[v] = make_pair(d[minV].first + w, minV);
+    }
+    vector<int> pred;
+    int mark = n - 1;
+    while (mark != -1) {
+        pred.push_back(mark);
+        mark = d[mark].second;
+    }
+    for (int i = 1; i < pred.size(); ++i) {
+    }
+    return 0;
+}
