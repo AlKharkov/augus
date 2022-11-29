@@ -7,9 +7,6 @@ with open('27_B.txt') as inlet:
         distance.append(a)
         counts.append(b // 36 + (b % 36 != 0))
         pref.append(pref[-1] + counts[-1])
-    pref.append(0)
-    distance.append(0)
-    counts.append(0)
     for i in range(n, 0, -1):
         post.append(post[-1] + counts[i])
     post.append(0)
